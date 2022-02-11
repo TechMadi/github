@@ -1,0 +1,152 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-10 mx-auto col-sm-12 col-12">
+      <div class="card">
+        <div
+          class="card-header d-flex justify-content-center flex-column flex-sm-row"
+        >
+          <div class="profile-pic text-center">
+            <img
+              [src]="userProfile.avatar_url"
+              class="img-fluid img-thumbnail w-50 rounded my-auto"
+            />
+            <div class="date">
+              <p>
+                {{ userProfile.created_at | date }} -
+                {{ userProfile.updated_at | date }}
+              </p>
+            </div>
+          </div>
+
+          <div class="details my-auto text-sm-left text-center">
+            <h2 class="lead" *ngIf="userProfile.name">
+              {{ userProfile.name }}
+            </h2>
+
+            <h2 class="lead" *ngIf="!userProfile.name">
+              {{ userProfile.login }}
+            </h2>
+            <hr />
+            <p>{{ userProfile.bio }}</p>
+            <div class="stats d-flex flex-column">
+              <small class="text-danger">Statistics</small>
+              <span class="mx-1"> {{ userProfile.followers }} Followers </span>
+              <span class="mx-1">{{ userProfile.following }} Following </span>
+            </div>
+            <hr />
+            <div class="repos d-flex justify-content-even flex-column">
+              <small class="text-danger">Repo and Gists</small>
+              <span class="mx-1"> {{ userProfile.public_gists }} Gists </span>
+              <span class="mx-1">{{ userProfile.public_repos }} Repos </span>
+            </div>
+            <hr />
+            <div class="socials d-flex flex-row flex-sm-column">
+              <small
+                class="text-danger"
+                *ngIf="userProfile.blog || userProfile.email"
+                >Socials</small
+              >
+              <a
+                [href]="userProfile.blog"
+                class="btn btn-link text-left"
+                *ngIf="userProfile.blog"
+              >
+                Blog
+              </a>
+              <a
+                class="btn btn-link"
+                href="mailto: userProfile.email"
+                *ngIf="userProfile.email"
+                >Email {{ userProfile.name }}</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <nav ngbNav #nav="ngbNav" class="nav-tabs">
+            <ng-container ngbNavItem>
+              <a ngbNavLink (click)="getFollowers(userProfile.login)"
+                >Followers</a
+              >
+              <ng-template ngbNavContent>
+                <div class="container">
+                  <div class="row">
+                    <div
+                      *ngFor="let follower of followers"
+                      class="col-md-3 my-auto col-sm-6 col-12"
+                    >
+                      <div class="card my-2">
+                        <div class="card-body text-center">
+                          <img
+                            [src]="follower.avatar_url"
+                            [alt]="follower.login"
+                            class="img-fluid rounded float-center"
+                          />
+                          <p class="text-danger">{{ follower.login }}</p>
+                          <button
+                            class="btn btn-danger mt-2 text-center"
+                            [routerLink]="[
+                              '/users',
+                              follower.login,
+                              follower.id
+                            ]"
+                          >
+                            View Profile
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+            <ng-container ngbNavItem>
+              <a ngbNavLink (click)="getFollowing(userProfile.login)"
+                >Following</a
+              >
+              <ng-template ngbNavContent>
+                <div class="container">
+                  <div class="row">
+                    <div
+                      *ngFor="let followed of following"
+                      class="col-md-3 my-auto col-sm-6 col-12"
+                    >
+                      <div class="card my-2">
+                        <div class="card-body text-center">
+                          <img
+                            [src]="followed.avatar_url"
+                            [alt]="followed.login"
+                            class="img-fluid rounded float-center"
+                          />
+                          <p class="text-danger">{{ followed.login }}</p>
+                          <button
+                            class="btn btn-danger mt-2 text-center"
+                            [routerLink]="[
+                              '/users',
+                              followed.login,
+                              followed.id
+                            ]"
+                          >
+                            View Profile
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+            <ng-container ngbNavItem>
+              <a ngbNavLink>Repos</a>
+              <ng-template ngbNavContent>
+                <p>Assignment for you</p>
+              </ng-template>
+            </ng-container>
+          </nav>
+
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
